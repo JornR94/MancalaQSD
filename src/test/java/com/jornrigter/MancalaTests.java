@@ -1,5 +1,6 @@
 package com.jornrigter;
 
+import com.jornrigter.moves.InvalidMoveException;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +28,7 @@ public class MancalaTests {
                 () -> mancalaBoard.makeMove(7),
                 "Expected makeMove to throw InvalidMoveException (CANT_PICK_COLLECTION_PIT), but it didn't"
         );
-        assertEquals(InvalidMoveException.Type.CANT_PICK_COLLECTION_PIT, thrown.getType());
+        assertEquals(InvalidMoveException.Type.CANT_PICK_COLLECTION_HOLE, thrown.getType());
     }
 
     @Test
@@ -38,7 +39,7 @@ public class MancalaTests {
                 () -> mancalaBoard.makeMove(14),
                 "Expected makeMove to throw InvalidMoveException (CANT_PICK_COLLECTION_PIT), but it didn't"
         );
-        assertEquals(InvalidMoveException.Type.CANT_PICK_COLLECTION_PIT, thrown.getType());
+        assertEquals(InvalidMoveException.Type.CANT_PICK_COLLECTION_HOLE, thrown.getType());
     }
 
     @Test
@@ -85,7 +86,7 @@ public class MancalaTests {
     // Now start making the first actual valid move
 
     /**
-     * Player 1: ove hole 3 -- this should finish with one stone in the player's own collection pit, so it should be the
+     * Player 1: move hole 3 -- this should finish with one seed in the player's own collection pit, so it should be the
      * same player's turn again
      * @throws InvalidMoveException
      */
@@ -93,11 +94,11 @@ public class MancalaTests {
     @Order(7)
     void testValidMove1() throws InvalidMoveException {
         mancalaBoard.makeMove(3);
-        assertEquals(0, mancalaBoard.getHole(3).getStones());
-        assertEquals(5, mancalaBoard.getHole(4).getStones());
-        assertEquals(5, mancalaBoard.getHole(5).getStones());
-        assertEquals(5, mancalaBoard.getHole(6).getStones());
-        assertEquals(1, mancalaBoard.getHole(7).getStones());
+        assertEquals(0, mancalaBoard.getHole(3).getSeeds());
+        assertEquals(5, mancalaBoard.getHole(4).getSeeds());
+        assertEquals(5, mancalaBoard.getHole(5).getSeeds());
+        assertEquals(5, mancalaBoard.getHole(6).getSeeds());
+        assertEquals(1, mancalaBoard.getHole(7).getSeeds());
     }
 
     /**
@@ -137,12 +138,12 @@ public class MancalaTests {
     @Order(10)
     void testValidMove2() throws InvalidMoveException {
         mancalaBoard.makeMove(2);
-        assertEquals(0, mancalaBoard.getHole(2).getStones());
-        assertEquals(1, mancalaBoard.getHole(3).getStones());
-        assertEquals(6, mancalaBoard.getHole(4).getStones());
-        assertEquals(6, mancalaBoard.getHole(5).getStones());
-        assertEquals(6, mancalaBoard.getHole(6).getStones());
-        assertEquals(1, mancalaBoard.getHole(7).getStones());
+        assertEquals(0, mancalaBoard.getHole(2).getSeeds());
+        assertEquals(1, mancalaBoard.getHole(3).getSeeds());
+        assertEquals(6, mancalaBoard.getHole(4).getSeeds());
+        assertEquals(6, mancalaBoard.getHole(5).getSeeds());
+        assertEquals(6, mancalaBoard.getHole(6).getSeeds());
+        assertEquals(1, mancalaBoard.getHole(7).getSeeds());
     }
 
     /**
@@ -169,9 +170,9 @@ public class MancalaTests {
     @Order(12)
     void testValidMove3() throws InvalidMoveException {
         mancalaBoard.makeMove(10); // Will end up in collection pit (hole 14)
-        assertEquals(0, mancalaBoard.getHole(10).getStones());
-        assertEquals(5, mancalaBoard.getHole(11).getStones());
-        assertEquals(1, mancalaBoard.getHole(14).getStones());
+        assertEquals(0, mancalaBoard.getHole(10).getSeeds());
+        assertEquals(5, mancalaBoard.getHole(11).getSeeds());
+        assertEquals(1, mancalaBoard.getHole(14).getSeeds());
     }
 
     /**
@@ -181,10 +182,10 @@ public class MancalaTests {
     @Order(13)
     void testValidMove4() throws InvalidMoveException {
         mancalaBoard.makeMove(13);
-        assertEquals(2, mancalaBoard.getHole(14).getStones());
-        assertEquals(5, mancalaBoard.getHole(1).getStones());
-        assertEquals(1, mancalaBoard.getHole(2).getStones());
-        assertEquals(2, mancalaBoard.getHole(3).getStones());
+        assertEquals(2, mancalaBoard.getHole(14).getSeeds());
+        assertEquals(5, mancalaBoard.getHole(1).getSeeds());
+        assertEquals(1, mancalaBoard.getHole(2).getSeeds());
+        assertEquals(2, mancalaBoard.getHole(3).getSeeds());
     }
 
     /**
@@ -194,8 +195,8 @@ public class MancalaTests {
     @Order(14)
     void testValidMove5() throws InvalidMoveException {
         mancalaBoard.makeMove(5);
-        assertEquals(7, mancalaBoard.getHole(6).getStones());
-        assertEquals(2, mancalaBoard.getHole(7).getStones());
+        assertEquals(7, mancalaBoard.getHole(6).getSeeds());
+        assertEquals(2, mancalaBoard.getHole(7).getSeeds());
     }
 
     /**
@@ -206,12 +207,12 @@ public class MancalaTests {
     void testValidMoves6() throws InvalidMoveException {
         mancalaBoard.makeMove(9); // Should end up in collection pit: move again
         mancalaBoard.makeMove(13); // Should end up in collection pit: move again
-        assertEquals(0, mancalaBoard.getHole(13).getStones());
-        // Ends up in hole 13, which doesn't have any stones, so should take the stones from player 1's hole 1 (opposite)
+        assertEquals(0, mancalaBoard.getHole(13).getSeeds());
+        // Ends up in hole 13, which doesn't have any seeds, so should take the seeds from player 1's hole 1 (opposite)
         mancalaBoard.makeMove(8);
-        assertEquals(0, mancalaBoard.getHole(1).getStones());
-        // Collection pit player 2 should have 10 stones now
-        assertEquals(10, mancalaBoard.getHole(14).getStones());
+        assertEquals(0, mancalaBoard.getHole(1).getSeeds());
+        // Collection pit player 2 should have 10 seeds now
+        assertEquals(10, mancalaBoard.getHole(14).getSeeds());
     }
 
     /**
@@ -220,9 +221,9 @@ public class MancalaTests {
     @Test
     @Order(16)
     void testValidMove7() throws InvalidMoveException {
-        // Ends up in hole 5, which doesn't have any stones, so should take the stones from player 2's hole 9 (opposite)
+        // Ends up in hole 5, which doesn't have any seeds, so should take the seeds from player 2's hole 9 (opposite)
         mancalaBoard.makeMove(3);
-        // Collection pit player 1 should have 4 stones now (2 extra from hole 9)
-        assertEquals(4, mancalaBoard.getHole(7).getStones());
+        // Collection pit player 1 should have 4 seeds now (2 extra from hole 9)
+        assertEquals(4, mancalaBoard.getHole(7).getSeeds());
     }
 }
