@@ -11,7 +11,14 @@ public class InvalidMoveException extends Exception {
 
         public String getErrorMessage() {
             switch (this) {
-                // TODO: implement
+                case CANT_PICK_COLLECTION_HOLE:
+                    return "You cannot pick a collection hole";
+                case CANT_PICK_HOLE_OTHER_PLAYER:
+                    return "You cannot pick the hole of another player";
+                case INVALID_HOLE:
+                    return "Invalid hole given";
+                case CANT_PICK_EMPTY_HOLE:
+                    return "You cannot pick an empty hole";
                 default:
                     throw new IllegalArgumentException("Unknown Type provided: " + this);
             }

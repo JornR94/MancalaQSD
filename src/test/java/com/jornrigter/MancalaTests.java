@@ -15,7 +15,12 @@ public class MancalaTests {
      */
     @BeforeAll
     public static void setUpBeforeAll() {
-        mancalaBoard = new MancalaBoard();
+        mancalaBoard = new MancalaBoard(new MancalaBoard.OnGameEndedListener() {
+            @Override
+            public void gameEnded() {
+                // Do nothing.
+            }
+        });
     }
 
     // Start with a bunch of tests after the initial setup, testing for exceptions being thrown correctly.
